@@ -1,0 +1,14 @@
+import {Hono} from "hono";
+import {signInController, signUpController} from "../controllers/user.controller";
+
+
+export const userRouter = new Hono<{
+    Bindings: {
+        DATABASE_URL: string;
+        JWT_SECRET: string;
+    }
+}>();
+
+userRouter.post('/signup', signUpController)
+
+userRouter.post('/signin', signInController)
