@@ -3,6 +3,7 @@ import {PrismaClient} from "@prisma/client/edge";
 import {withAccelerate} from "@prisma/extension-accelerate";
 import {setCookie} from "hono/cookie";
 import {sign} from "hono/jwt";
+import {signinInput, signupInput} from "@100xdevs/medium-common";
 
 const signUpController = async (c: Context) => {
 
@@ -22,7 +23,13 @@ const signUpController = async (c: Context) => {
         if (!body.username || !body.password) {
             return c.text('Missing username or password')
         }
-
+        const {success} = signupInput.safeParse(body);
+        if (!success) {
+            c.status(411);
+            return c.json({
+                message: "Inputs not correct"
+            })
+        }
         const existingUser = await prisma.user.findUnique({
             where: {
                 username: body.username,
@@ -69,6 +76,14 @@ const signInController = async (c: Context) => {
 
         if (!body.username || !body.password) {
             return c.text('Missing username or password')
+        }
+
+        const {success} = signinInput.safeParse(body);
+        if (!success) {
+            c.status(411);
+            return c.json({
+                message: "Inputs not correct"
+            })
         }
 
         const user = await prisma.user.findUnique({

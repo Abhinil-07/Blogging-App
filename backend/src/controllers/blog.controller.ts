@@ -3,11 +3,19 @@ import {getCookie} from "hono/cookie";
 import {verify} from "hono/jwt";
 import {PrismaClient} from "@prisma/client/edge";
 import {withAccelerate} from "@prisma/extension-accelerate";
+import {createBlogInput} from "@100xdevs/medium-common";
+import {z} from "zod";
 
 
 interface authenticatedUser extends Context {
     userId?: string;
 }
+
+const updateBlogInput = z.object({
+    title: z.string(),
+    content: z.string(),
+    id: z.string()
+})
 
 const authorization = async (c: authenticatedUser, next: () => Promise<unknown>) => {
     const jwt = getCookie(c, 'jwt');
@@ -42,6 +50,13 @@ const postBlog = async (c: authenticatedUser) => {
     try {
         const userId = c.get('userId');
         const body = await c.req.json();
+        const {success} = createBlogInput.safeParse(body);
+        if (!success) {
+            c.status(411);
+            return c.json({
+                message: "Inputs not correct"
+            })
+        }
         const post = await prisma.blog.create({
             data: {
                 title: body.title,
@@ -68,7 +83,15 @@ const updateBlog = async (c: authenticatedUser) => {
 
     try {
         const userId = c.get('userId');
+        console.log(userId);
         const body = await c.req.json();
+        const {success} = updateBlogInput.safeParse(body);
+        if (!success) {
+            c.status(411);
+            return c.json({
+                message: "Inputs not correct"
+            })
+        }
         const post = await prisma.blog.update({
             where: {
                 id: body.id
@@ -116,7 +139,7 @@ const getSingleBlog = async (c: Context) => {
             where: {
                 id: id
             },
-            select :{
+            select: {
                 id: true,
                 title: true,
                 content: true,
@@ -136,4 +159,4 @@ const getSingleBlog = async (c: Context) => {
 
 }
 
-export {postBlog, authorization, updateBlog,getAllBlogs,getSingleBlog}
+export {postBlog, authorization, updateBlog, getAllBlogs, getSingleBlog}

@@ -14,13 +14,13 @@ export const blogRouter = new Hono<{
     }
 }>();
 
-blogRouter.post("/*", authorization)
+blogRouter.use("/*", authorization)
 
 blogRouter.post('/post', postBlog)
 
 blogRouter.put('/update', updateBlog)
 
-blogRouter.get("/bulk",getAllBlogs)
+blogRouter.get('/bulk',getAllBlogs)
 
-blogRouter.get("/:id",getSingleBlog)
+blogRouter.get('/:id',getSingleBlog)
 
