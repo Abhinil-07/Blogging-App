@@ -53,7 +53,7 @@ const signUpController = async (c: Context) => {
 
         setCookie(c, 'jwt', jwt, {secure: true, httpOnly: true,})
 
-        return c.text("Sign up successful")
+        return c.json({message: "Sign up successful",user,jwt})
     } catch (e: any) {
         console.log(e.message);
         c.status(411);
