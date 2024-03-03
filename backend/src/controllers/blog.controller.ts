@@ -118,14 +118,22 @@ const getAllBlogs = async (c: Context) => {
     }).$extends(withAccelerate());
 
     try {
-        const posts = await prisma.blog.findMany();
-        return c.json(posts);
+        const page = c.req.param('number')
+        const blogsPerPage = 10;
+        const offset = (Number(page) - 1) * blogsPerPage;
+
+        // Query the database to fetch blogs for the current page
+        const blogs = await prisma.blog.findMany({
+            take: blogsPerPage,
+            skip: offset,
+        });
+
+        return c.json(blogs);
     } catch (e: any) {
         console.log(e.message);
         c.status(500);
         return c.text('Internal server error');
     }
-
 }
 
 const getSingleBlog = async (c: Context) => {
