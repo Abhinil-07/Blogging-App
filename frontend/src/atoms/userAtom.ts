@@ -1,8 +1,10 @@
-import {atom} from "recoil";
+import { atom } from "recoil";
+
+const defaultUserThreads = localStorage.getItem("user-info") || "null";
 
 const userAtom = atom({
-    key: 'userAtom',
-    default : JSON.parse(localStorage.getItem('user-info') || '{}')
-})
+  key: "userAtom",
+  default: JSON.parse(defaultUserThreads),
+});
 
-export default userAtom
+export default userAtom;
