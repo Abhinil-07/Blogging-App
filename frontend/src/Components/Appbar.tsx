@@ -3,17 +3,17 @@ import { Link } from "react-router-dom";
 import image from "../assets/medium.png";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
-import { useState } from "react";
+// import { useState } from "react";
 import { BACKEND_URL } from "../config";
 import axios from "axios";
 
 export const Appbar = () => {
   const setUser = useSetRecoilState(userAtom);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const user = useRecoilValue(userAtom);
   const handleLogout = async () => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const response = await axios.post(
         `${BACKEND_URL}/api/v1/user/logout`,
         {},
@@ -28,7 +28,7 @@ export const Appbar = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
   return (
