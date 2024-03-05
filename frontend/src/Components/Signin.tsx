@@ -32,7 +32,7 @@ export default function Signin() {
         }
       );
       console.log(response);
-      localStorage.setItem("user-threads", JSON.stringify(response.data.user));
+      localStorage.setItem("user-info", JSON.stringify(response.data.user));
       setUser(response.data.user);
     } catch (error) {
       console.log(error);
