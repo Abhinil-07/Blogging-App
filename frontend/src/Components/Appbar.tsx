@@ -35,10 +35,7 @@ export const Appbar = () => {
     <div className="border-b flex justify-between px-10 py-4">
       <div className="flex justify-center items-center space-x-2">
         <img className="h-[30px] w-[30px]" src={image} alt="" />
-        <Link
-          to={"/blogs"}
-          className="flex flex-col justify-center cursor-pointer"
-        >
+        <Link to={"/"} className="flex flex-col justify-center cursor-pointer">
           Medium
         </Link>
       </div>

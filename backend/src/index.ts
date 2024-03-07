@@ -14,7 +14,7 @@ const app = new Hono<{
 app.use(
   "/*",
   cors({
-    origin: "*",
+    origin: ["http://localhost:5173", "https://blogging-app-olive.vercel.app/"],
     credentials: true,
   })
 );
