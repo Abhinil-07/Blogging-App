@@ -24,7 +24,7 @@ const authorization = async (
 
   if (!jwt) {
     c.status(401);
-    return c.text("You are not logged in");
+    return c.text("You are not logged in1");
   }
 
   try {
@@ -34,7 +34,7 @@ const authorization = async (
       await next();
     } else {
       c.status(401);
-      return c.text("You are not logged in");
+      return c.text("You are not logged in2");
     }
   } catch (e: any) {
     console.log(e.message);
@@ -49,7 +49,9 @@ const postBlog = async (c: authenticatedUser) => {
   }).$extends(withAccelerate());
 
   try {
+    console.log(c);
     const userId = c.get("userId");
+    console.log(userId);
     const body = await c.req.json();
     const { success } = createBlogInput.safeParse(body);
     if (!success) {
@@ -72,7 +74,7 @@ const postBlog = async (c: authenticatedUser) => {
   } catch (e: any) {
     console.log(e.message);
     c.status(500);
-    return c.text("Internal server error");
+    return c.text(e);
   }
 };
 
@@ -118,6 +120,12 @@ const getAllBlogs = async (c: Context) => {
   }).$extends(withAccelerate());
 
   try {
+    console.log(c);
+    const page = parseInt(c.req.query("page") as string) || 1; // Extract page number from URL params, default to 1 if not provided
+    const pageSize = 5; // Number of blogs per page
+    console.log("Page number" + page);
+    const offset = (page - 1) * pageSize;
+
     const blogs = await prisma.blog.findMany({
       select: {
         content: true,
@@ -129,8 +137,10 @@ const getAllBlogs = async (c: Context) => {
           },
         },
       },
+      skip: offset,
+      take: pageSize,
     });
-    return c.json({ blogs });
+    return c.json({ blogs, user: c.get("userId") });
   } catch (e: any) {
     console.log(e.message);
     c.status(500);

@@ -1,11 +1,15 @@
+import { useState } from "react";
 import { Appbar } from "../Components/Appbar";
 import { BlogCard } from "../Components/BlogCard";
 import { BlogSkeleton } from "../Components/BlogSkeleton";
 import { useBlogs } from "../hooks";
 
 const Blogs = () => {
-  const { loading, blogs } = useBlogs();
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const { loading, blogs } = useBlogs(currentPage);
+  const handlePageClick = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
   if (loading) {
     return (
       <>
@@ -35,6 +39,10 @@ const Blogs = () => {
             />
           ))}
         </div>
+      </div>
+      <div className="px-2">
+        <button onClick={() => handlePageClick(1)}>1</button>
+        <button onClick={() => handlePageClick(2)}>2</button>
       </div>
     </div>
   );

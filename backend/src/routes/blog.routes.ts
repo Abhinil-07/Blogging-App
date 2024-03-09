@@ -19,7 +19,7 @@ export const blogRouter = new Hono<{
   };
 }>();
 
-// blogRouter.use("/*", authorization)
+// blogRouter.use("/*", authorization);
 
 blogRouter.post("/post", postBlog);
 

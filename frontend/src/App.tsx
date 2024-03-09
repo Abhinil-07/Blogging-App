@@ -7,6 +7,7 @@ import userAtom from "./atoms/userAtom.ts";
 import Blogs from "./Pages/Blogs.tsx";
 
 import { Blog } from "./Pages/Blog.tsx";
+import { Publish } from "./Pages/Publish.tsx";
 
 function App() {
   const user = useRecoilValue(userAtom);
@@ -17,6 +18,7 @@ function App() {
         <Route path="/" element={user ? <Blogs /> : <Auth />} />
         <Route path="/blog" element={<Blogs />} />
         <Route path="/blog/:id" element={<Blog />} />
+        <Route path="/publish" element={<Publish />} />
       </Routes>
     </BrowserRouter>
   );
