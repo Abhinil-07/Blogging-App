@@ -1,5 +1,5 @@
 import { Avatar } from "./BlogCard";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import image from "../assets/medium.png";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
@@ -10,6 +10,7 @@ import axios from "axios";
 export const Appbar = () => {
   const setUser = useSetRecoilState(userAtom);
   // const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const user = useRecoilValue(userAtom);
   const handleLogout = async () => {
     try {
@@ -29,6 +30,7 @@ export const Appbar = () => {
       console.log(error);
     } finally {
       // setLoading(false);
+      navigate("/");
     }
   };
   return (
@@ -57,7 +59,7 @@ export const Appbar = () => {
           Logout
         </button>
 
-        <Avatar size={"big"} name={user.name} />
+        <Avatar size={"big"} name={user ? user.name : "Unknown"} />
       </div>
     </div>
   );
